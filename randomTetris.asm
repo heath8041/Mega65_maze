@@ -1,30 +1,3 @@
-//#import "randomTetris.asm"
-#import "../Mega65_System/System_Macros.s"
-
-System_BasicUpstart65(start) // autostart macro
-* = $2016
-start:  
-				lda #00 //make the back ground and border black
-  			sta VIC.BORDER_COLOR
-  			sta VIC.SCREEN_COLOR
-        jsr SetupRandom  //setup to get rand working
-loop: 
-        jsr GetRandom    //get a random value in acc
-        jsr GetMazeChar   //
-        jsr KERNAL.CHROUT
-        jsr UpdateRandom  //update to another rand
-        jmp loop
-
-GetMazeChar:
-  and #$1   //and the value in A with 1 to get odd or even value
-  beq !+    //if a and 1 ==0 a = /
-  lda #110  //else a=\
-  jmp !++   //note this !+ and !++ notation. it just a really short label
-!:
-  lda #109
-!:
-  rts
-
 // generate random number code
 SetupRandom:
 			// set the 16 bit rnd seed
@@ -45,7 +18,6 @@ GetRandom:
 			jmp GetRandom
 !skip:
 			rts
-
 
 UpdateRandom:
 			lda rndseed 		// get first byte of rnd seed
